@@ -109,8 +109,8 @@ $D bash -c "cd jdkbuild && \
     --with-cacerts-file=/opt/cacerts \
     --with-freetype-include=/opt/sysroot/usr/include/freetype2/ \
     --with-freetype-lib=/opt/sysroot/usr/lib/arm-linux-gnueabihf/ \
-    --with-extra-cflags='-Wno-error' \
-    --with-extra-cxxflags='-Wno-error' \
+    --with-extra-cflags='-Wno-error -I/opt/sysroot/usr/include/c++/4.8 -I/opt/sysroot/usr/include/arm-linux-gnueabihf/c++/4.8' \
+    --with-extra-cxxflags='-Wno-error -I/opt/sysroot/usr/include/c++/4.8 -I/opt/sysroot/usr/include/arm-linux-gnueabihf/c++/4.8' \
     --with-milestone=${OJDK_MILESTONE} \
     --with-update-version=${OJDK_UPDATE} \
     --with-build-number=${OJDK_BUILD}"
