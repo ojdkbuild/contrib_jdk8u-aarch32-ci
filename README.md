@@ -1,7 +1,7 @@
 OpenJDK 8 AArch32 builds
 ========================
 
-[![travis](https://travis-ci.org/ojdkbuild/contrib_jdk8u-aarch32-ci.svg?branch=jdk8u201-b09-aarch32-190124)](https://travis-ci.org/ojdkbuild/contrib_jdk8u-aarch32-ci/builds)
+[![travis](https://travis-ci.org/ojdkbuild/contrib_jdk8u-aarch32-ci.svg?branch=jdk8u202-b08-aarch32-190124)](https://travis-ci.org/ojdkbuild/contrib_jdk8u-aarch32-ci/builds)
 
 OpenJDK 8 AArch32 builds done on Travis CI - [downloads](https://github.com/ojdkbuild/contrib_jdk8u-aarch32-ci/releases).
 
