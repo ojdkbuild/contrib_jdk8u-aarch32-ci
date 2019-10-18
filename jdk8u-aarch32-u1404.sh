@@ -111,7 +111,7 @@ $D bash -c "cd jdkbuild && \
     --with-freetype-lib=/opt/sysroot/usr/lib/arm-linux-gnueabihf/ \
     --with-extra-cflags='-Wno-error -I/opt/sysroot/usr/include/c++/4.8 -I/opt/sysroot/usr/include/arm-linux-gnueabihf/c++/4.8' \
     --with-extra-cxxflags='-Wno-error -I/opt/sysroot/usr/include/c++/4.8 -I/opt/sysroot/usr/include/arm-linux-gnueabihf/c++/4.8' \
-    --with-milestone=${OJDK_MILESTONE} \
+    --with-milestone=fcs \
     --with-update-version=${OJDK_UPDATE} \
     --with-build-number=${OJDK_BUILD}"
 $D bash -c "cd jdkbuild && \

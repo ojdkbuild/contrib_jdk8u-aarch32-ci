@@ -27,7 +27,7 @@ script:
   - export OJDK_TAG=`git describe --exact-match --tags HEAD`
   - if [ -z ${OJDK_TAG} ] ; then exit 1 ; fi
   - export OJDK_UPDATE=`echo ${OJDK_TAG} | sed 's/-/ /' | awk '{print substr($1,6)}'`
-  - export OJDK_BUILD=10
+  - export OJDK_BUILD=`echo ${OJDK_TAG} | sed 's/-/ /' | awk '{print substr($2,2,2)}'`
   - export OJDK_MILESTONE=ojdkbuild
   - export OJDK_IMAGE=jdk-8u${OJDK_UPDATE}-${OJDK_MILESTONE}-linux-armhf
   - ./jdk8u-aarch32-u1404.sh ${OJDK_TAG}
