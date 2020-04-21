@@ -113,7 +113,11 @@ $D bash -c "cd jdkbuild && \
     --with-extra-cxxflags='-Wno-error -I/opt/sysroot/usr/include/c++/4.8 -I/opt/sysroot/usr/include/arm-linux-gnueabihf/c++/4.8' \
     --with-milestone=fcs \
     --with-update-version=${OJDK_UPDATE} \
-    --with-build-number=${OJDK_BUILD}"
+    --with-build-number=${OJDK_BUILD} \
+    --with-vendor-name=ojdkbuild \
+    --with-vendor-url=https://github.com/ojdkbuild \
+    --with-vendor-bug-url=https://github.com/ojdkbuild/ojdkbuild/issues \
+    --with-vendor-vm-bug-url=https://github.com/ojdkbuild/ojdkbuild/issues"
 $D bash -c "cd jdkbuild && \
     LOG=info \
     make images"
