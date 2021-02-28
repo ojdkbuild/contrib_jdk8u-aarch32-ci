@@ -21,7 +21,7 @@ task:
       memory: 2G
 
   environment:
-    GITHUB_TOKEN: ENCRYPTED[4e32bad1f6dc4dcfec265113dc98e20de34e8793b3ca2d348ea3f9d3e1248b97b1b1223356b705692733a8389ed4a0da]
+    GITHUB_TOKEN: ENCRYPTED[0cce1389f3a75ca7b3f8cb4464c0582896fc1a66b0ccc3bbedb0d54c0ae14681189f88b097efe33df897972ca45337b3]
     CC: arm-linux-gnueabihf-gcc
     CXX: arm-linux-gnueabihf-g++
 
@@ -86,13 +86,15 @@ task:
             --with-debug-level=release \
             --with-stdc++lib=static \
             --with-boot-jdk=/bootjdk/ \
+            --with-extra-cflags=-Wno-error \
+            --with-extra-cxxflags=-Wno-error \
             --with-milestone=fcs \
             --with-update-version=${OJDK_UPDATE} \
             --with-build-number=${OJDK_BUILD} \
             --with-vendor-name=ojdkbuild \
             --with-vendor-url=https://github.com/ojdkbuild \
             --with-vendor-bug-url=https://github.com/ojdkbuild/ojdkbuild/issues \
-            --with-vendor-vm-bug-url=https://github.com/ojdkbuild/ojdkbuild/issues
+            --with-vendor-vm-bug-url=https://github.com/ojdkbuild/ojdkbuild/issues \
             --with-num-cores=2
     cd /build && make images LOG=info
     mv /build/images/j2sdk-image /build/${OJDK_IMAGE}
