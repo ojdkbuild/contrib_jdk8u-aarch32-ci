@@ -1,0 +1,106 @@
+# Copyright 2021, akashche at redhat.com
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+task:
+  matrix:
+    container:
+      image: ojdkbuild/ubuntu-xenial-arm32
+      cpu: 2
+      memory: 2G
+
+  environment:
+    GITHUB_TOKEN: ENCRYPTED[4e32bad1f6dc4dcfec265113dc98e20de34e8793b3ca2d348ea3f9d3e1248b97b1b1223356b705692733a8389ed4a0da]
+    CC: arm-linux-gnueabihf-gcc
+    CXX: arm-linux-gnueabihf-g++
+
+  script: |
+    export OJDK_TAG=`git describe --exact-match --tags HEAD`
+    if [ -z ${OJDK_TAG} ] ; then exit 1 ; fi
+    echo ${OJDK_TAG}
+    export OJDK_UPDATE=`echo ${OJDK_TAG} | sed 's/-/ /' | awk '{print substr($1,6)}'`
+    export OJDK_BUILD=`echo ${OJDK_TAG} | sed 's/-/ /g' | awk '{print substr($2,2)}'`
+    export OJDK_IMAGE=jdk-8u${OJDK_UPDATE}-${OJDK_MILESTONE}-linux-armhf
+    # root
+    curl -LO http://hg.openjdk.java.net/aarch32-port/jdk8u/archive/${OJDK_TAG}.tar.bz2
+    tar -xjf ${OJDK_TAG}.tar.bz2
+    rm ${OJDK_TAG}.tar.bz2
+    mv jdk8u-${OJDK_TAG} /jdk8u
+    # corba  
+    curl -LO http://hg.openjdk.java.net/aarch32-port/jdk8u/corba/archive/${OJDK_TAG}.tar.bz2
+    tar -xjf ${OJDK_TAG}.tar.bz2
+    rm ${OJDK_TAG}.tar.bz2
+    mv corba-${OJDK_TAG} /jdk8u/corba
+    # hotspot
+    curl -LO http://hg.openjdk.java.net/aarch32-port/jdk8u/hotspot/archive/${OJDK_TAG}.tar.bz2
+    tar -xjf ${OJDK_TAG}.tar.bz2
+    rm ${OJDK_TAG}.tar.bz2
+    mv hotspot-${OJDK_TAG} /jdk8u/hotspot
+    # jaxp
+    curl -LO http://hg.openjdk.java.net/aarch32-port/jdk8u/jaxp/archive/${OJDK_TAG}.tar.bz2
+    tar -xjf ${OJDK_TAG}.tar.bz2
+    rm ${OJDK_TAG}.tar.bz2
+    mv jaxp-${OJDK_TAG} /jdk8u/jaxp
+    # jaxws
+    curl -LO http://hg.openjdk.java.net/aarch32-port/jdk8u/jaxws/archive/${OJDK_TAG}.tar.bz2
+    tar -xjf ${OJDK_TAG}.tar.bz2
+    rm ${OJDK_TAG}.tar.bz2
+    mv jaxws-${OJDK_TAG} /jdk8u/jaxws
+    # jdk
+    curl -LO http://hg.openjdk.java.net/aarch32-port/jdk8u/jdk/archive/${OJDK_TAG}.tar.bz2
+    tar -xjf ${OJDK_TAG}.tar.bz2
+    rm ${OJDK_TAG}.tar.bz2
+    mv jdk-${OJDK_TAG} /jdk8u/jdk
+    # langtools
+    curl -LO http://hg.openjdk.java.net/aarch32-port/jdk8u/langtools/archive/${OJDK_TAG}.tar.bz2
+    tar -xjf ${OJDK_TAG}.tar.bz2
+    rm ${OJDK_TAG}.tar.bz2
+    mv langtools-${OJDK_TAG} /jdk8u/langtools
+    # nashorn
+    curl -LO http://hg.openjdk.java.net/aarch32-port/jdk8u/nashorn/archive/${OJDK_TAG}.tar.bz2
+    tar -xjf ${OJDK_TAG}.tar.bz2
+    rm ${OJDK_TAG}.tar.bz2
+    mv nashorn-${OJDK_TAG} /jdk8u/nashorn
+    # bootjdk
+    curl -LO https://github.com/ojdkbuild/contrib_jdk8u-ci/releases/download/jdk8u172-b11/jdk-8u172-ojdkbuild-linux-x64.zip
+    unzip -q jdk-8u172-ojdkbuild-linux-x64.zip
+    mv jdk-8u172-ojdkbuild-linux-x64 /bootjdk
+    # build
+    mkdir /build
+    cd /build && bash /jdk8u/configure \
+            --openjdk-target=arm-linux-gnueabihf \
+            --with-jvm-variants=client \
+            --enable-unlimited-crypto=yes \
+            --enable-debug-symbols=none \
+            --with-debug-level=release \
+            --with-stdc++lib=static \
+            --with-boot-jdk=/bootjdk/ \
+            --with-milestone=fcs \
+            --with-update-version=${OJDK_UPDATE} \
+            --with-build-number=${OJDK_BUILD} \
+            --with-vendor-name=ojdkbuild \
+            --with-vendor-url=https://github.com/ojdkbuild \
+            --with-vendor-bug-url=https://github.com/ojdkbuild/ojdkbuild/issues \
+            --with-vendor-vm-bug-url=https://github.com/ojdkbuild/ojdkbuild/issues
+            --with-num-cores=2
+    cd /build && make images LOG=info
+    mv /build/images/j2sdk-image /build/${OJDK_IMAGE}
+    cd /build && zip -qyr9 ${OJDK_IMAGE}.zip ${OJDK_IMAGE}
+    mkdir /build/dist
+    mv /build/${OJDK_IMAGE}.zip /build/dist/${OJDK_IMAGE}.zip
+    cd /build/dist && sha256sum ${OJDK_IMAGE}.zip > ${OJDK_IMAGE}.zip.sha256
+    # deploy
+    cd /build && curl -LO https://github.com/tcnksm/ghr/releases/download/v0.13.0/ghr_v0.13.0_linux_amd64.tar.gz
+    cd /build && tar -xzf ghr_v0.13.0_linux_amd64.tar.gz
+    /build/ghr_v0.13.0_linux_amd64/ghr -t ${GITHUB_TOKEN} -u ojdkbuild -r contrib_jdk8u-aarch32-ci -c ${CIRRUS_CHANGE_IN_REPO} ${CIRRUS_TAG} /build/dist
