@@ -31,7 +31,7 @@ task:
     echo ${OJDK_TAG}
     export OJDK_UPDATE=`echo ${OJDK_TAG} | sed 's/-/ /' | awk '{print substr($1,6)}'`
     export OJDK_BUILD=`echo ${OJDK_TAG} | sed 's/-/ /g' | awk '{print substr($2,2)}'`
-    export OJDK_IMAGE=jdk-8u${OJDK_UPDATE}-${OJDK_MILESTONE}-linux-armhf
+    export OJDK_IMAGE=jdk-8u${OJDK_UPDATE}-ojdkbuild-linux-armhf
     # root
     curl -LO http://hg.openjdk.java.net/aarch32-port/jdk8u/archive/${OJDK_TAG}.tar.bz2
     tar -xjf ${OJDK_TAG}.tar.bz2
