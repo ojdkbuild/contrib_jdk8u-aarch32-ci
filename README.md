@@ -1,7 +1,7 @@
 OpenJDK 8 AArch32 builds
 ========================
 
-[![cirrus](https://api.cirrus-ci.com/github/ojdkbuild/contrib_jdk8u-aarch32-ci.svg?branch=jdk8u312-ga-aarch32-20210923)](https://cirrus-ci.com/github/ojdkbuild/contrib_jdk8u-aarch32-ci)
+[![cirrus](https://api.cirrus-ci.com/github/ojdkbuild/contrib_jdk8u-aarch32-ci.svg?branch=jdk8u322-b06-aarch32-20220124)](https://cirrus-ci.com/github/ojdkbuild/contrib_jdk8u-aarch32-ci)
 
 OpenJDK 8 AArch32 builds done on [Cirrus CI](https://cirrus-ci.org/) - [downloads](https://github.com/ojdkbuild/contrib_jdk8u-aarch32-ci/releases).
 
